@@ -43,8 +43,8 @@ if (filereadable('/etc/wsl.conf'))
   nnoremap "*y :WinYank<CR>
   nnoremap "*p :WinPut<CR>
 
-  command WinYank let res = system("win32yank.exe -i", @")|echo res
-  command WinPut let @" = system("win32yank.exe -o --lf")
+  command WinYank let res = system("win32yank -i", @")|echo res
+  command WinPut let @" = system("win32yank -o --lf")
 
   command! -nargs=* E call FASD_V(<f-args>)
   function! FASD_V (...)
