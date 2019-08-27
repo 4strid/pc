@@ -1,28 +1,20 @@
-"Last updated 2019-08-15
-"TODO
-"what the <heck> do (  ) do in normal mode? it's completely useless in code
-"- autocmd mksession is ok, but need a way to specify which instance of vim is master
-"- better yet, keep a rolling buffer like we did with buffer
-"customize airline??? ignore trailing whitespace sometimes (notes, .vimrc)
-"> maybe if this is a function it'll work?
-"why is vim so slow in WSL?
+"2019/Aug
 
-set nocompatible				"be IMproved!
-cd %:p:h						"change working directory to path of open file, if there is one
+set nocompatible    "be IMproved!
 
 " update 2018-11 consistently use .vim directory regardless of OS
-set rtp+=$HOME/.vim/bundle/Vundle.vim			"setup for Vundle
-let path='$HOME/.vim/bundle'					"with Unix paths
+set rtp+=$HOME/.vim/bundle/Vundle.vim  "setup for Vundle
+let path='$HOME/.vim/bundle'           "with Unix paths
 
 if has('win32')
-	set encoding=utf-8			"makes alt keys work
-	set clipboard=unnamed		"makes clipboard work
+  set encoding=utf-8      "makes alt keys work
+  set clipboard=unnamed   "makes clipboard work
 end
 
 "mac is uncomfortable since it's both Unix and Windows-like
 if has('osx')
-	set encoding=utf-8			"makes alt keys work
-	set clipboard=unnamed		"makes clipboard work
+  set encoding=utf-8      "makes alt keys work
+  set clipboard=unnamed   "makes clipboard work
 end
 
 " PLUGINS
@@ -51,8 +43,8 @@ Plugin 'bkad/CamelCaseMotion'
 Plugin 'mhinz/vim-janah'
 Plugin 'GGalizzi/cake-vim'
 Plugin 'bcicen/vim-vice'
-Plugin 'mustache/vim-mustache-handlebars'
 Plugin 'mbbill/undotree'
+"TODO: learn how to use this! super useful but a bit unwieldy
 Plugin 'jeetsukumaran/vim-indentwise'
 Plugin 'Yggdroot/indentLine'
 Plugin 'sjbach/lusty'
@@ -81,74 +73,75 @@ call vundle#end()
 " INITIALIZATION
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 if !isdirectory($HOME."/.vim/undo/")
-    call mkdir($HOME."/.vim/undo", "p")
+  call mkdir($HOME."/.vim/undo", "p")
 endif
 
 " SETTINGS
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 filetype plugin indent on
-set mousehide			" hide mouse while typing
-set history=1000		" big history
-set number				" line numbers
-set showmatch			" match brackets
-set incsearch			" incremental search
-set hlsearch			" search highlighting
-set whichwrap=b,s,h,l,<,>,[,]	" give keys wraparound
-set backspace=indent,eol,start	" thank you jesus, normal acting backspace
-set nowrap				" who needs it
-set tabstop=2			" width of tab character
-"set shiftwidth=4		" indents have a width of 4
-" NEW 2019
- set shiftwidth=2		" I guess I'm mostly a 2 spaces kind of guy
- set softtabstop=2		" 
-set showtabline=2       " always show tabline
-set t_RV= ttymouse=xterm2		" fixes weird 2c at startup HACK (shouldn't need it forever)
-"set mouse=n 			" only important in macvim?
-set ignorecase			" let search be case insensitive
-set smartcase			" *unless* it contains a capitalized letter
-set hidden				" hide buffers without saving them
-"set relativenumber		" interesting, but not performant
+set mousehide      " hide mouse while typing
+set history=1000   " big history
+set number         " line numbers
+set showmatch      " match brackets
+set incsearch      " incremental search
+set hlsearch       " search highlighting
+set whichwrap=b,s,h,l,<,>,[,]   " give keys wraparound
+set backspace=indent,eol,start  " thank you jesus, normal acting backspace
+set nowrap        " who needs it
+"WELCOME TO 2019: we 2 spaces now
+set shiftwidth=2   " indents have a width of 4
+set softtabstop=2
+set expandtab      "look into when we do or don't want this
+set tabstop=2      " width of tab character. useful to set this to 4 so we don't go out of sync
+set showtabline=2
+set t_RV= ttymouse=xterm2  " fixes weird 2c at startup HACK (shouldn't need it forever)
+"set mouse=n       " only important in macvim?
+set ignorecase     " let search be case insensitive
+set smartcase      " *unless* it contains a capitalized letter
+set hidden         " hide buffers without saving them
 set scrolloff=5
 set noswapfile
 set undofile
 set undodir=~/.vim/undo/
 set autoread
 
-"donut duplicate!
-autocmd GUIEnter * ""
-autocmd!
-
-"set noerrorbells visualbell t_vb=
 "actually i like the bell :P
-autocmd GUIEnter * set visualbell t_vb=
+"set noerrorbells visualbell t_vb=
+set noerrorbells visualbell t_vb=
+augroup VIMRC
+  autocmd!
+  autocmd GUIEnter * set visualbell t_vb=
+  autocmd BufWritePost $MYVIMRC source $MYVIMRC
+  autocmd GUIEnter * set visualbell t_vb=
 
-"Special for python <3
-autocmd FileType python :setlocal softtabstop=4 | :setlocal expandtab
-"Special for HTML <3
-autocmd FileType html :setlocal shiftwidth=2 | :setlocal tabstop=2
-autocmd FileType javascript :setlocal shiftwidth=2 | :setlocal tabstop=2 | :setlocal softtabstop=2 | :setlocal expandtab
-"autocmd FileType javascript :setlocal shiftwidth=4 | :setlocal tabstop=4
+  "Special for python <3
+  autocmd FileType python :setlocal softtabstop=4 | :setlocal expandtab
+  "Special for HTML <3
+  autocmd FileType html :setlocal shiftwidth=2 | :setlocal tabstop=2
+  ""autocmd FileType javascript :setlocal shiftwidth=2 | :setlocal tabstop=2 | :setlocal softtabstop=2 | :setlocal expandtab
+  "autocmd FileType javascript :setlocal shiftwidth=4 | :setlocal tabstop=4
 
-autocmd FileType haskell :setlocal softtabstop=4 | :setlocal expandtab
+  autocmd FileType haskell :setlocal softtabstop=4 | :setlocal expandtab
 
-" REDACTED: maps the autoinsert semicolon function, appending <CR>'s functionality
-"autocmd FileType javascript :execute 'inoremap <CR> ' . maparg('<CR>','i') . "<c-o>:call <SID>CallbackSemicolon()\r"
-" in 2019, if we want semicolons we hit ;;
-" i don't miss all the weirdness this mapping used to cause
+  "REDACTED
+  "autocmd FileType javascript :execute 'inoremap <CR> ' . maparg('<CR>','i') . "<c-o>:call <SID>CallbackSemicolon()\r"
 
-" close preview window automatically when using annotated code completions
-"autocmd CursorMovedI * if pumvisible() == 0|pclose|endif " delete straight away
-autocmd InsertLeave * if pumvisible() == 0|pclose|endif " waits until exit
-"autocmd CompleteDone * pclose " probably more performant
+  " close preview window automatically when using annotated code completions
+  "autocmd CursorMovedI * if pumvisible() == 0|pclose|endif " delete straight away
+  autocmd InsertLeave * if pumvisible() == 0|pclose|endif " waits until exit
+  "autocmd CompleteDone * pclose " probably more performant
+
+augroup end
 
 " ABBREVIATONS
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" common typos
+
+"common typos
 " this is either really smart or REALLY dumb
 inoreabbrev fucntion function
 " idk why i can't spell this word specifically
 inoreabbrev PropTyptes PropTypes
-inoreabbrev PropTytpes PropTypes
+inoreabbrev propTyptes propTypes
 
 " FUNCTIONS
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -157,54 +150,31 @@ inoreabbrev PropTytpes PropTypes
 " TODO: Still causes an infinite loop at the end of files
 
 function! s:JumpToNextWord()
+  normal! w
+  while strpart(getline('.'), col('.')-1, 1) !~ '\w'
     normal! w
-    while strpart(getline('.'), col('.')-1, 1) !~ '\w'
-        normal! w
-	endwhile
+  endwhile
 endfunction
 
 function! s:JumpToPrevWord()
-    normal! b
-	while strpart(getline('.'), col('.')-1, 1) !~ '\w'
-        normal! b
-    endwhile
+  normal! b
+  while strpart(getline('.'), col('.')-1, 1) !~ '\w'
+      normal! b
+  endwhile
 endfunction
 
 " Inserts semicolons at the end of constructs like Callback(function() {})
 "function! s:CallbackSemicolon()
-"	if strpart(getline('.'), col('.')-1) == '})'
-"		execute "normal! A;\<Esc>"
-"		execute "normal! O\t\b"
-"	endif
+"  if strpart(getline('.'), col('.')-1) == '})'
+"    execute "normal! A;\<Esc>"
+"    execute "normal! O\t\b"
+"  endif
 "endfunction
 
 function! s:LineEmpty()
-	return getline('.') == ''
+  return getline('.') == ''
 endfunction
 
-" Switches between unix and windows vimrc's
-function! MergeVimrc()
-	if has('win32')
-		exec '!move /Y .vimrc _vimrc'
-		exec '!move /Y .gvimrc _gvimrc'
-	elseif has('unix')
-		exec '!sed "s/$//" _vimrc > .vimrc'
-		exec '!rm -f _vimrc'
-		exec '!sed "s/$//" _gvimrc > .gvimrc'
-		exec '!rm -f _gvimrc'
-	endif
-endfunction
-
-"relative line number in visual line and visual block mode
-
-function! s:EnterVisualLine()
-	execute "set relativenumber"
-	execute "normal! V"
-endfunction
-function! s:EnterVisualBlock()
-	execute "set relativenumber"
-	execute "normal! "
-endfunction
 
 function! s:TrailingChar(check)
 	let l:line = getline('.')
@@ -228,19 +198,13 @@ tnoremap ;k <CR>
 "convenience commands
 nnoremap <leader>s :%s /
 nnoremap \ :%s /
-nnoremap <C-\> :%s /\v
-nnoremap <leader>/ /\v
-nnoremap <leader>S :%s /\v
-nnoremap <leader>R :so ./Session.vim<CR>
-nnoremap <leader>q :q<CR>
-nnoremap <leader>q! :q!<CR>
-nnoremap <leader>cd :cd %:h<CR>:pwd<CR>
-nnoremap <leader>h :help 
+
 "hop out of vim real quick
 nnoremap ! :!$SHELL<CR>
 "make sure to make a $SHELL command in windows :^)
 
-"insert single character then return to normal mode
+"insert single character without leaving normal mode
+" very useful when auto pairs is being a pain
 nnoremap <leader>i i <Esc>r
 nnoremap <leader>a a <Esc>r
 
@@ -274,8 +238,6 @@ nnoremap <leader>p :bp<CR>
 "(this also means ;d won't delete the last buffer)
 " heck this messes up tabs though
 nnoremap <leader>d :bp<CR>:bd #<CR>
-nnoremap <leader>e :enew<CR>
-
 " May start using vim as "tmux" in which case tabs would be
 " a welcome replacement to actually switching ttys
 nnoremap <leader>tt :tabnew<CR>
@@ -283,22 +245,42 @@ nnoremap <leader>tn :tabn<CR>
 nnoremap <leader>tb :tabp<CR>
 nnoremap <leader>tp :tabp<CR>
 
-nnoremap <silent>V :call <SID>EnterVisualLine()<CR>
-nnoremap <silent><c-v> :call <SID>EnterVisualBlock()<CR>
+"relative line number in visual line and visual block mode
+
+function! s:enter_visual_line()
+  execute "set relativenumber"
+  execute "normal! V"
+endfunction
+function! s:enter_visual_block()
+  execute "set relativenumber"
+  execute "normal! "
+endfunction
+nnoremap <silent>V :call <SID>enter_visual_line()<CR>
+nnoremap <silent><c-v> :call <SID>enter_visual_block()<CR>
 vnoremap <silent>;k :<C-U>set norelativenumber<CR>
 vnoremap <silent><Esc> :<C-U>set norelativenumber<CR>
 " most common exits from visual mode
 vnoremap <silent>y y:<C-U>set norelativenumber<CR>
 vnoremap <silent>d d:<C-U>set norelativenumber<CR>
 vnoremap <silent>x x:<C-U>set norelativenumber<CR>
+"don't clobber register when pasting 
+"vnoremap p "xd"pp
+vnoremap <C-p> p
+
+nnoremap <leader>I mmI <Esc>r
+nnoremap <leader>A mmA <Esc>r
+
+"TODO: make i autotab the way o does
+" note: just use S
 
 "navigate the jumplist with + and -
 nnoremap + :lnext<CR>
 nnoremap - :lprevious<CR>
 
-
 "ridiculous maps
-command Date read !date -I
+command! Date read !date -I
+command! Sign execute "normal! acutejs (Astrid Fesz-Nguyen IV)\<CR>"
+
 "text decoration
 nnoremap __ yypVr-
 nnoremap _= yypVr=
@@ -346,10 +328,11 @@ inoremap <expr><C-l>     neocomplete#complete_common_string()
 " <CR>: close popup and save indent.
 inoremap <CR> <C-r>=<SID>my_cr_function()<CR>
 function! s:my_cr_function()
-	return pumvisible() ? "\<C-y>" : "\<CR>"
+  return pumvisible() ? "\<C-y>" : "\<CR>"
 endfunction
 inoremap <expr><Tab>  pumvisible() ? "\<C-n>" : "<Tab>"
-" close popup and delete backword char.
+" <C-h>, <BS>: close popup and delete backword char.
+inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
 inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
 
 vmap <CR> <Plug>(EasyAlign)
@@ -386,8 +369,8 @@ nnoremap <C-N> :NERDTreeToggle<CR>
 
 "COLORS
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set t_Co=256				"make colors work on xterm
-set background=dark			" dark background
+set t_Co=256         "make colors work on xterm
+set background=dark  " dark background
 colorscheme sorcerer
 syntax on
 "removes italics from sorcerer theme
@@ -397,19 +380,31 @@ hi diffNewFile gui=NONE
 hi diffFile gui=NONE
 hi diffLine gui=NONE
 
+"set a background color (maybe machine specific? sorcerer specific?)
+hi Normal                 cterm=NONE             ctermbg=234  ctermfg=145
+
 "COMMANDS
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 command! Restart mksession! ~/.restart.vim | call VimAndDie()
 "command! Restart :mksession! ~/.vim/_restart_.vim | Cmd gvim -S ~/.vim/_restart_.vim
 "(better for gvim, add to .local.vimrc if desired)
-command ShowWhitespace :set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:< | :set list
+command! ShowWhitespace :set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:< | :set list
 "displays the output of a command inside of vim (for windows)
-command -nargs=+ Cmd :let @r = system(<q-args>) | echo @r
+command! -nargs=+ Cmd :let @r = system(<q-args>) | echo @r
 "move to current file's location
-command Here call Here()
-command NoItalics hi Comment gui=NONE | hi diffOldFile gui=NONE | hi diffNewFile gui=NONE | hi diffFile gui=NONE | hi diffLine gui=NONE 
+command! Here call Here()
+command! NoItalics hi Comment gui=NONE | hi diffOldFile gui=NONE | hi diffNewFile gui=NONE | hi diffFile gui=NONE | hi diffLine gui=NONE 
 
-function! VimAndDie ()
+command! Spaces setlocal shiftwidth=2 | setlocal softtabstop=2 | set expandtab
+command! Tabs setlocal shiftwidth=2 | setlocal tabstop=2 | set noexpandtab
+command! BigTabs setlocal shiftwidth=4 | setlocal tabstop=4 | set noexpandtab
+
+command! FixSpaces %s /\t/  /g
+command! FixSpaces4 %s /\t/    /g
+command! FixTabs %s /  /\t/g
+command! FixTabs4 %s /    /\t/g
+
+function VimAndDie ()
   execute "!vim -S ~/.restart.vim"
   exit
 endfunction
@@ -442,17 +437,21 @@ endif
 let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 let g:neocomplete#enable_auto_select = 1
 " Enable omni completion.
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-"autocmd FileType javascript setlocal omnifunc=tern#Complete
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+augroup VIMRC_NEOCOMPLETE
+  autocmd!
+  autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+  autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+  autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+  "autocmd FileType javascript setlocal omnifunc=tern#Complete
+  autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+  autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+  autocmd CompleteDone * pclose
+augroup end
 " Enable heavy omni completion.
 if !exists('g:neocomplete#sources#omni#input_patterns')
   let g:neocomplete#sources#omni#input_patterns = {}
 endif
-
 
 " too slow! 
 "if !exists('g:neocomplete#force_omni_input_patterns')
@@ -465,13 +464,12 @@ endif
 "endif
 "let g:neocomplete#sources#omni#functions.javascript = ['tern#Complete']
 
-autocmd CompleteDone * pclose
-
 " TERN
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " AUTOPAIRS
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"TODO: change this based on filetype
 let g:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`'}
 
 " SYNTASTIC
@@ -517,71 +515,74 @@ nnoremap <silent>;k :noh<CR>:set norelativenumber<CR>
 " change buffers in a terminal
 tnoremap <C-w>;n <C-w>:bn<CR>
 tnoremap <C-w>;p <C-w>:bp<CR>
+nnoremap <C-w>;n :bn<CR>
 nnoremap <C-w>t :term<CR>
-" not exactly ideal, but this preserves window flow when closing a "full" terminal
-nnoremap <C-w><C-t> :term<CR><C-w>100+
-" (previously)
-" nnoremap <C-w><C-t> :term++curwin<CR>
+tnoremap <C-w>t <C-w>:belowright term<CR>
+nnoremap <C-w><C-t> :term++curwin<CR>
 
 " ODDS N ENDS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 nnoremap <expr>q IsThisHelp() ? "<C-w>q" : "q"
 
 function! IsThisHelp ()
   return &filetype == "help"
 endfunction
 
+
+function! Remember ()
+  mksession! $HOME/.vim/restore.session
+endfunction
+
 function! AutoCloseEmpty ()
-	let lastline = line("$")
-	if lastline == 1 && getline(lastline) == "" && expand("%") == ""
-		exec "bdelete!"
-	endif
+  let lastline = line("$")
+  if lastline == 1 && getline(lastline) == "" && expand("%") == ""
+    exec "bdelete!"
+  endif
 endfunction
 
 function! Remember ()
-	mksession! $HOME/.vim/restore.session
+  mksession! $HOME/.vim/restore.session
 endfunction
 
-function! Recall ()
-	source $HOME/.vim/restore.session
-endfunction
-
-command Recall call Recall() | NoItalics
-
-autocmd BufLeave * call AutoCloseEmpty()
-autocmd ExitPre * bufdo call AutoCloseEmpty()
-autocmd ExitPre * call Remember()
-
-autocmd TabEnter * Here
 " seems weird to reset the airline theme but after much, much trial and error it's the
 " only thing I've found to recover tabline when reloading vimrc
-command Vimrc source $MYVIMRC | AirlineTheme bubblegum | redraw | echo "reticulating vimrc..."
+command! Vimrc source $MYVIMRC | AirlineTheme bubblegum | redraw | echo "reticulating vimrc..."
 
-autocmd BufWritePost $MYVIMRC Vimrc 
-"autocmd BufWritePost .vimrc Vimrc 
-"autocmd BufWritePost _vimrc Vimrc 
+augroup VIMRC_BUFF_STUFF
+  autocmd!
+  autocmd BufLeave * call AutoCloseEmpty()
+  autocmd ExitPre * bufdo call AutoCloseEmpty()
+  autocmd ExitPre * call Remember()
 
-" at least try to keep viminfos in sync between vim instances
-" to trigger it manually
-autocmd BufWritePost * wv
-autocmd BufEnter * rv
+  autocmd TabEnter * Here
 
+  autocmd BufWritePost $MYVIMRC Vimrc 
+  "autocmd BufWritePost .vimrc Vimrc 
+  "autocmd BufWritePost _vimrc Vimrc 
 
-"set a background color (needed in some terminals)
-hi Normal                 cterm=NONE             ctermbg=234  ctermfg=145
+  " at least try to keep viminfos in sync between vim instances (:wv and :rv can be used)
+  " to trigger it manually
+  autocmd BufWritePost * rv | wv
+  autocmd BufEnter * rv
+augroup end
+
+"if i wanted help, i'd type :help
+nnoremap [[A <Esc>
+lnoremap [[A <Esc>
+cnoremap [[A <Esc>
+inoremap [[A <Esc>
+vnoremap [[A <Esc>
 
 " System Specifics
 if filereadable($HOME."/.local.vimrc")
-	so ~/.local.vimrc
+  so ~/.local.vimrc
 endif
 
-" FUTURE:
-" tabstop spaces / tabs (lost these from work laptop)
-" fix spaces / tabs (RIP)
-" flip flop plugin
+"TODO:
+"why is vim so slow in WSL?
+"flip flop plugin
 
-" NOTES:
+"NOTES
 "to do diffs do :vert diffsplit <filename>
 "close with diffoff!
-"dp :diffput, do :diffget (mnemonic diff 'obtain')
+"dp :diffput, do :diffget (mnemonic 'obtain')
