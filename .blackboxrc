@@ -26,9 +26,11 @@ session.focusLastWindow:	True
 session.focusNewWindows:	True
 session.menuFile:	/home/cute/.blackbox/menu
 session.edgeSnapThreshold:	0
-session.changeWorkspaceWithMouseWheel:	True
+session.changeWorkspaceWithMouseWheel:	False
 session.focusModel:	ClickToFocus
 session.toolbarActionsWithMouseWheel:	True
 session.placementIgnoresShaded:	True
 session.windowSnapThreshold:	0
 session.fullMaximization:	False
+
+session.menuFile: /home/m00p/.blackbox/menu
