@@ -35,7 +35,8 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'scrooloose/syntastic'
 Plugin 'Shougo/neocomplete.vim'
-Plugin 'kien/ctrlp.vim'
+"never really use this
+"Plugin 'kien/ctrlp.vim'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'easymotion/vim-easymotion'
@@ -43,19 +44,20 @@ Plugin 'jelera/vim-javascript-syntax'
 Plugin 'gavocanov/vim-js-indent'
 "Plugin 'helino/vim-json'
 "Plugin 'pangloss/vim-javascript'
-"Plugin 'SirVer/ultisnips'
 Plugin 'michaeljsmith/vim-indent-object'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-repeat'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'scrooloose/nerdcommenter'
-Plugin 'scrooloose/nerdtree'
+"yeah nah
+"Plugin 'scrooloose/nerdtree'
 Plugin 'hdima/python-syntax'
 Plugin 'hynek/vim-python-pep8-indent'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'justinmk/vim-gtfo'
-Plugin 'tikhomirov/vim-glsl'
+"not doing gl stuff rn
+"Plugin 'tikhomirov/vim-glsl'
 "Plugin 'PProvost/vim-ps1'
 Plugin 'alvan/vim-closetag'
 Plugin 'tpope/vim-obsession'
@@ -67,11 +69,8 @@ Plugin 'bkad/CamelCaseMotion'
 Plugin 'mhinz/vim-janah'
 Plugin 'GGalizzi/cake-vim'
 Plugin 'bcicen/vim-vice'
-Plugin 'mustache/vim-mustache-handlebars'
-"Cold fusion
-Plugin 'ernstvanderlinden/vim-coldfusion'
-Plugin 'cflint/cflint-syntastic'
 Plugin 'mbbill/undotree'
+"TODO: learn how to use this! super useful but a bit unwieldy
 Plugin 'jeetsukumaran/vim-indentwise'
 Plugin 'Yggdroot/indentLine'
 
@@ -95,13 +94,13 @@ set hlsearch			" search highlighting
 set whichwrap=b,s,h,l,<,>,[,]	" give keys wraparound
 set backspace=indent,eol,start	" thank you jesus, normal acting backspace
 set nowrap				" who needs it
-set tabstop=2			" width of tab character
-"set shiftwidth=4		" indents have a width of 4
-" NEW 2019
- set shiftwidth=2		" I guess I'm mostly a 2 spaces kind of guy
- set softtabstop=2		" 
-set showtabline=2       " always show tabline
-set t_RV= ttymouse=xterm2		" fixes weird 2c at startup HACK (shouldn't need it forever)
+"WELCOME TO 2019: we 2 spaces now
+set shiftwidth=2		" indents have a width of 4
+set softtabstop=2
+"set expandtab          "look into when we do or don't want this
+set tabstop=4			" width of tab character. useful to set this to 4 so we don't go out of sync
+set showtabline=2
+set t_RV= ttymouse=xterm2	" fixes weird 2c at startup HACK (shouldn't need it forever)
 "set mouse=n 			" only important in macvim?
 set ignorecase			" let search be case insensitive
 set smartcase			" *unless* it contains a capitalized letter
@@ -113,37 +112,42 @@ set undofile
 set undodir=~/.vim/undo/
 set autoread
 
-"donut duplicate!
-autocmd GUIEnter * ""
-autocmd!
-
 "actually i like the bell :P
 "set noerrorbells visualbell t_vb=
-autocmd GUIEnter * set visualbell t_vb=
+set noerrorbells visualbell t_vb=
+augroup VIMRC
+  autocmd!
+  autocmd GUIEnter * set visualbell t_vb=
+  autocmd BufWritePost $MYVIMRC source $MYVIMRC
+  autocmd GUIEnter * set visualbell t_vb=
 
-"Special for python <3
-autocmd FileType python :setlocal softtabstop=4 | :setlocal expandtab
-"Special for HTML <3
-autocmd FileType html :setlocal shiftwidth=2 | :setlocal tabstop=2
-autocmd FileType javascript :setlocal shiftwidth=2 | :setlocal tabstop=2 | :setlocal softtabstop=2 | :setlocal expandtab
-"autocmd FileType javascript :setlocal shiftwidth=4 | :setlocal tabstop=4
+  "Special for python <3
+  autocmd FileType python :setlocal softtabstop=4 | :setlocal expandtab
+  "Special for HTML <3
+  autocmd FileType html :setlocal shiftwidth=2 | :setlocal tabstop=2
+  autocmd FileType javascript :setlocal shiftwidth=2 | :setlocal tabstop=2 | :setlocal softtabstop=2 | :setlocal expandtab
+  "autocmd FileType javascript :setlocal shiftwidth=4 | :setlocal tabstop=4
 
-autocmd FileType haskell :setlocal softtabstop=4 | :setlocal expandtab
+  autocmd FileType haskell :setlocal softtabstop=4 | :setlocal expandtab
 
-"maps the autoinsert semicolon function, appending <CR>'s functionality
-"autocmd FileType javascript :execute 'inoremap <CR> ' . maparg('<CR>','i') . "<c-o>:call <SID>CallbackSemicolon()\r"
+  "maps the autoinsert semicolon function, appending <CR>'s functionality
+  "autocmd FileType javascript :execute 'inoremap <CR> ' . maparg('<CR>','i') . "<c-o>:call <SID>CallbackSemicolon()\r"
 
-" close preview window automatically when using annotated code completions
-"autocmd CursorMovedI * if pumvisible() == 0|pclose|endif " delete straight away
-autocmd InsertLeave * if pumvisible() == 0|pclose|endif " waits until exit
-"autocmd CompleteDone * pclose " probably more performant
+  " close preview window automatically when using annotated code completions
+  "autocmd CursorMovedI * if pumvisible() == 0|pclose|endif " delete straight away
+  autocmd InsertLeave * if pumvisible() == 0|pclose|endif " waits until exit
+  "autocmd CompleteDone * pclose " probably more performant
+
+augroup end
 
 " ABBREVIATONS
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "make help open in tabs instead of windows
 "disabled. i like having 100000 windows open now
 "cnoreabbrev <expr> help getcmdtype() == ":" && getcmdline() == 'help' ? 'tab help' : 'h'
+
 "common typos
+cnoreabbrev fucntion function
 
 " FUNCTIONS
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -183,9 +187,11 @@ function! MergeVimrc()
 		exec '!move /Y .vimrc _vimrc'
 		exec '!move /Y .gvimrc _gvimrc'
 	elseif has('unix')
-		exec '!sed "s/$//" _vimrc > .vimrc'
+		exec '!sed "s/
+$//" _vimrc > .vimrc'
 		exec '!rm -f _vimrc'
-		exec '!sed "s/$//" _gvimrc > .gvimrc'
+		exec '!sed "s/
+$//" _gvimrc > .gvimrc'
 		exec '!rm -f _gvimrc'
 	endif
 endfunction
@@ -261,10 +267,11 @@ vnoremap <silent>;k :<C-U>set norelativenumber<CR>
 vnoremap <silent><Esc> :<C-U>set norelativenumber<CR>
 
 "ridiculous maps
-command Date read !date -I
+command! Date read !date -I
 nnoremap ;fn ifunction (
 
 "insert single character without leaving normal mode
+" very useful when auto pairs is being a pain
 nnoremap <leader>i i <Esc>r
 nnoremap <leader>a a <Esc>r
 nnoremap <leader>I mmI <Esc>r
@@ -382,13 +389,13 @@ hi diffLine gui=NONE
 "COMMANDS
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "command Restart :mksession! ~/_restart_.vim | Cmd gvim -S ~/_restart_.vim
-command Restart mksession! ~/.restart.vim | call VimAndDie()
-command ShowWhitespace :set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:< | :set list
+command! Restart mksession! ~/.restart.vim | call VimAndDie()
+command! ShowWhitespace :set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:< | :set list
 "displays the output of a command inside of vim (for windows)
-command -nargs=+ Cmd :let @r = system(<q-args>) | echo @r
+command! -nargs=+ Cmd :let @r = system(<q-args>) | echo @r
 "move to current file's location
-command Here call Here()
-command NoItalics hi Comment gui=NONE | hi diffOldFile gui=NONE | hi diffNewFile gui=NONE | hi diffFile gui=NONE | hi diffLine gui=NONE 
+command! Here call Here()
+command! NoItalics hi Comment gui=NONE | hi diffOldFile gui=NONE | hi diffNewFile gui=NONE | hi diffFile gui=NONE | hi diffLine gui=NONE 
 
 function VimAndDie ()
   execute "!vim -S ~/.restart.vim"
@@ -423,12 +430,17 @@ endif
 let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 let g:neocomplete#enable_auto_select = 1
 " Enable omni completion.
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-"autocmd FileType javascript setlocal omnifunc=tern#Complete
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+augroup VIMRC_NEOCOMPLETE
+  autocmd!
+  autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+  autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+  autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+  "autocmd FileType javascript setlocal omnifunc=tern#Complete
+  autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+  autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+  autocmd CompleteDone * pclose
+augroup end
 " Enable heavy omni completion.
 if !exists('g:neocomplete#sources#omni#input_patterns')
   let g:neocomplete#sources#omni#input_patterns = {}
@@ -446,15 +458,15 @@ endif
 "endif
 "let g:neocomplete#sources#omni#functions.javascript = ['tern#Complete']
 
-autocmd CompleteDone * pclose
-
 " TERN
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " AUTOPAIRS
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '#':'#', '`':'`'}
 "TODO: change this based on ft. sick of # doubling for no reason in my bash scripts
+"let g:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '#':'#', '`':'`'}
+"let g:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"','`':'`'} " backticks for JS
+let g:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"'}
 
 " SYNTASTIC
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -492,7 +504,7 @@ call camelcasemotion#CreateMotionMappings('<leader>')
 " move swap / undo directories
 
 " get length of previous line
-command TEST :let AYY = getline(line('.') - 1) | :echo AYY| :echo "length:" . strlen(AYY)
+command! TEST :let AYY = getline(line('.') - 1) | :echo AYY| :echo "length:" . strlen(AYY)
 
 nnoremap <silent>;k :noh<CR>:set norelativenumber<CR>
 
@@ -514,20 +526,6 @@ endif
 
 "set a background color
 hi Normal                 cterm=NONE             ctermbg=234  ctermfg=145
-
-
-" seems weird to reset the airline theme but after much, much trial and error it's the
-" only thing I've found to recover tabline when reloading vimrc
-command Vimrc source $MYVIMRC | AirlineTheme bubblegum | redraw | echo "reticulating vimrc..."
-
-autocmd BufWritePost $MYVIMRC Vimrc 
-"autocmd BufWritePost .vimrc Vimrc 
-"autocmd BufWritePost _vimrc Vimrc 
-
-" at least try to keep viminfos in sync between vim instances (:wv and :rv can be used)
-" to trigger it manually
-autocmd BufWritePost * wv
-autocmd BufEnter * rv
 
 " GOD YES TERMINAL MODE. I THOUGHT I DIDN'T NEED IT BUT IT IS EVERYTHING I WANT
 " hop in and out of a fullwindow terminal
@@ -554,13 +552,6 @@ endfunction
 " hop out of vim real quick
 nnoremap ! :!$SHELL<CR>
 
-function! AutoCloseEmpty ()
-	let lastline = line("$")
-	if lastline == 1 && getline(lastline) == "" && expand("%") == ""
-		exec "bdelete!"
-	endif
-endfunction
-
 function! Remember ()
 	mksession! $HOME/.vim/restore.session
 endfunction
@@ -568,18 +559,43 @@ endfunction
 " this is either really smart or REALLY dumb
 inoreabbrev fucntion function
 
-autocmd BufLeave * call AutoCloseEmpty()
-autocmd ExitPre * bufdo call AutoCloseEmpty()
-autocmd ExitPre * call Remember()
+" seems weird to reset the airline theme but after much, much trial and error it's the
+" only thing I've found to recover tabline when reloading vimrc
+command! Vimrc source $MYVIMRC | AirlineTheme bubblegum | redraw | echo "reticulating vimrc..."
 
-autocmd TabEnter * Here
+augroup VIMRC_BUFF_STUFF
+  autocmd!
+  autocmd BufLeave * call AutoCloseEmpty()
+  autocmd ExitPre * bufdo call AutoCloseEmpty()
+  autocmd ExitPre * call Remember()
 
+  autocmd TabEnter * Here
+
+  autocmd BufWritePost $MYVIMRC Vimrc 
+  "autocmd BufWritePost .vimrc Vimrc 
+  "autocmd BufWritePost _vimrc Vimrc 
+
+  " at least try to keep viminfos in sync between vim instances (:wv and :rv can be used)
+  " to trigger it manually
+  autocmd BufWritePost * wv
+  autocmd BufEnter * rv
+augroup end
 
 "function! FixTheSlowness ()
 	"au! CursorHold *
 "endfunction
 
 "autocmd FileType cf call FixTheSlowness()
+
+"if i wanted help, i'd press F1
+nnoremap [[A <Esc>
+lnoremap [[A <Esc>
+cnoremap [[A <Esc>
+inoremap [[A <Esc>
+vnoremap [[A <Esc>
+
+nnoremap x x
+
 
 "to do diffs do :vert diffsplit <filename>
 "close with diffoff!
