@@ -1,12 +1,6 @@
 autocmd FileType cf nnoremap <c-f> i<cfmail from="noreply@simpleviewinc.com" to="peter@debug.com" subject="debug" type="html"><return></cfmail><esc>
 autocmd FileType cf nnoremap <c-n> i<cfdump format="text" var="##"><esc>F#
 
-" for these massive 3000 line CF files it's pretty slow
-set redrawtime=6666
-
-" (F1 Key) If I needed help, I'd use :h
-nnoremap OP <Esc>
-
 " crude way to test if we are in WSL
 if (filereadable('/etc/wsl.conf'))
   "idk how to do motion mappings and do not have time to look it up
@@ -45,42 +39,47 @@ if (filereadable('/etc/wsl.conf'))
 
   command WinYank let res = system("win32yank -i", @")|echo res
   command WinPut let @" = system("win32yank -o --lf")
-
-  command! -nargs=* E call FASD_V(<f-args>)
-  function! FASD_V (...)
-	let cmd = 'fasd -f -e printf'
-	for arg in a:000
-	  let cmd = cmd . ' ' . arg
-	endfor
-	let path = system(cmd)
-	if filereadable(path)
-	  echo path
-	  exec 'edit' fnameescape(path)
-	  call Here()
-	else
-	  echo "sorry, but no"
-	endif
-  endfunction
-
-  command! -nargs=* Z call FASD_Z(<f-args>)
-  function! FASD_Z (...)
-	let cmd = 'fasd -d -e printf'
-	for arg in a:000
-	  let cmd = cmd . ' ' . arg
-	endfor
-	let path = system(cmd)
-	if filereadable(path)
-	  echo path
-	  exec 'cd' fnameescape(path)
-	else
-	  echo "sorry, but no"
-	endif
-  endfunction
 endif
 
-" no more cfsets without ending >
-" hopefully this is not annoying
-inoremap fset fset><Esc>i
+"colorscheme Chasing_Logic
+colorscheme Tomorrow-Night-Nineties
+"colorscheme lilydjwg_dark
 
-" WHY DOES THIS KEEP TURNING ON
-set textwidth=999999
+"doctor colorscheme a bit
+hi Comment ctermfg=8
+hi Visual ctermfg=8 ctermbg=7
+hi Number ctermfg=3
+hi Conceal ctermfg=8
+hi String ctermfg=2
+hi Constant ctermfg=7
+hi Special ctermfg=5
+hi Todo ctermfg=5
+
+hi Label ctermfg=5
+
+hi javaScriptNumber ctermfg=3
+hi javaScriptBraces ctermfg=5
+hi javaScriptNull ctermfg=12
+hi javaScriptBoolean ctermfg=12
+hi javaScriptStatement ctermfg=10
+hi javaScriptConditional ctermfg=1
+hi javaScriptLogicSymbols ctermfg=80
+hi javaScriptSource ctermfg=1
+hi javaScriptRepeat ctermfg=1
+hi javaScriptExceptions ctermfg=150
+hi javaScriptRegExp ctermfg=150
+hi javaScriptRegExpstring ctermfg=150
+hi javaScriptFuncExp ctermfg=15
+hi javaScriptBranch ctermfg=1
+hi javaScriptCommentTodo ctermfg=5
+
+
+"hmm this is hacky but we'll unify them someday
+if (&term == "xterm")
+  hi javaScriptExceptions ctermfg=3
+  hi javaScriptRegExp ctermfg=3
+  hi javaScriptRegExpstring ctermfg=3
+  hi Number ctermfg=209
+  hi javaScriptNumber ctermfg=209
+>>>>>>> master
+endif

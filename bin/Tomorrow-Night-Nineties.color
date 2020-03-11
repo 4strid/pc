@@ -1,0 +1,39 @@
+#!/bin/sh
+if [ "$TERM" = "linux" ]; then
+
+ f0_black=$'\e]P0010116'
+   f1_red=$'\e]P1e85678'
+ f2_green=$'\e]P289e079'
+f3_yellow=$'\e]P3ffff66'
+  f4_blue=$'\e]P45577d0'
+f5_purple=$'\e]P5e975b5'
+  f6_cyan=$'\e]P645ffff'
+ f7_white=$'\e]P7d889aa'
+ b8_black=$'\e]P8442244'
+   b9_red=$'\e]P9f25678'
+ bA_green=$'\e]PA67c967'
+bB_yellow=$'\e]PBff9965'
+  bC_blue=$'\e]PC7a67ac'
+bD_purple=$'\e]PDfc74f4'
+  bE_cyan=$'\e]PE69ffb0'
+ bF_white=$'\e]PFffb1f3'
+
+  /bin/echo -en "\
+$f0_black\
+$f1_red\
+$f2_green\
+$f3_yellow\
+$f4_blue\
+$f5_purple\
+$f6_cyan\
+$f7_white\
+$b8_black
+$b9_red\
+$bA_green\
+$bB_yellow\
+$bC_blue\
+$bD_purple\
+$bE_cyan\
+$bF_white\
+"
+fi
