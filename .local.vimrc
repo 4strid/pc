@@ -1,41 +1,71 @@
-"colorscheme Chasing_Logic
-colorscheme Tomorrow-Night-Nineties
-"colorscheme lilydjwg_dark
+" mostly stuff for phone
 
-"doctor colorscheme a bit
-hi Comment ctermfg=8
-hi Visual ctermfg=8 ctermbg=7
-hi Number ctermfg=3
-hi Conceal ctermfg=8
-hi String ctermfg=2
-hi Constant ctermfg=7
-hi Special ctermfg=5
-hi Todo ctermfg=5
+" prevent flubs
+nnoremap uu jj
+nnoremap ju jj
+nnoremap uj jj
+nnoremap ii kk
+nnoremap ki kk
+nnoremap ik kk
+nnoremap k) kk
+nnoremap )k kk
+nnoremap j= jj
+nnoremap =j jj
+nnoremap jn jj
 
-hi Label ctermfg=5
+"just blanket replace ctrl with comma lol
+nnoremap ,w <c-W>
+nnoremap ,r <c-r>
+nnoremap ,u <c-u>
+nnoremap ,d <c-d>
+"buttery smooth
+nnoremap ,<CR> :w<CR> 
 
-hi javaScriptNumber ctermfg=3
-hi javaScriptBraces ctermfg=5
-hi javaScriptNull ctermfg=12
-hi javaScriptBoolean ctermfg=12
-hi javaScriptStatement ctermfg=10
-hi javaScriptConditional ctermfg=1
-hi javaScriptLogicSymbols ctermfg=80
-hi javaScriptSource ctermfg=1
-hi javaScriptRepeat ctermfg=1
-hi javaScriptExceptions ctermfg=150
-hi javaScriptRegExp ctermfg=150
-hi javaScriptRegExpstring ctermfg=150
-hi javaScriptFuncExp ctermfg=15
-hi javaScriptBranch ctermfg=1
-hi javaScriptCommentTodo ctermfg=5
+"phone-y window nav shortcuts
+nnoremap ,w,h <c-W>v
+nnoremap ,w,j <c-W>s<c-W>j
+nnoremap ,w,k <c-W>s
+nnoremap ,w,l <c-W>v<c-W>l
+nnoremap ,wd :bn<CR>:bd #<CR>
+nnoremap ,D :bn<CR>:bd #<CR>
+nnoremap ,S :so %<CR>
+nnoremap ,= <c-W>=
 
+" terminal crap what needs duplicatin
+tnoremap ,w<C-u> <C-w>N<C-u>
+"nnoremap ,w;n :bn<CR>
+nnoremap ,wt :belowright term<CR>
+nnoremap ,w,t :term++curwin<CR>
 
-"hmm this is hacky but we'll unify them someday
-if (&term == "xterm")
-  hi javaScriptExceptions ctermfg=3
-  hi javaScriptRegExp ctermfg=3
-  hi javaScriptRegExpstring ctermfg=3
-  hi Number ctermfg=209
-  hi javaScriptNumber ctermfg=209
-endif
+" replace shift tab
+nnoremap <Left> mm<<`mh
+" arrow keys that FUCK
+nnoremap <silent><Right> :bn<CR>
+nnoremap <Up> <C-w><C-p>
+nnoremap <Down> <C-w><C-w>
+
+" $ hard 2 type
+nnoremap dx d$
+nnoremap vx v$
+nnoremap ctx ct$
+nnoremap cx c$
+
+" now do insert mode
+inoremap ,u  <Esc>u
+inoremap ,a <Esc>A
+inoremap ,i <Esc>I
+inoremap ,e <Esc>ea
+inoremap ,b <Esc>bi
+inoremap ,o <Esc>o
+inoremap ,O <Esc>O
+inoremap ,p <Esc>p
+
+"alternate escape escapes
+"just less likely to flub than ,k  \ we'll see which i end up using more
+vnoremap <silent>,<Space> :<C-U>set norelativenumber<CR>
+lnoremap ,<space> <Esc>
+vnoremap ,<space> <Esc>
+nnoremap <silent>,<space> :noh<CR>:set norelativenumber<CR>
+cnoremap ,<space> <c-e><c-u><Esc>:echo ""<CR>
+" if only we had this in Bash too lol
+tnoremap ,<space> <Esc>

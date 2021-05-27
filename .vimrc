@@ -1,4 +1,4 @@
-"2019/Nov
+
 
 set nocompatible    "be IMproved!
 
@@ -52,7 +52,6 @@ Plugin 'mbbill/undotree'
 "TODO: learn how to use this! super useful but a bit unwieldy
 Plugin 'jeetsukumaran/vim-indentwise'
 Plugin 'Yggdroot/indentLine'
-Plugin 'sjbach/lusty'
 
 " unused languages
 "Plugin 'itchyny/vim-haskell-indent'
@@ -61,6 +60,7 @@ Plugin 'sjbach/lusty'
 "Plugin 'PProvost/vim-ps1'
 
 " unused utilities
+"Plugin 'sjbach/lusty'
 "Plugin 'FredKSchott/CoVim' #damn, it'd be really cool if this had worked
 "Plugin 'justinmk/vim-gtfo'
 "Plugin 'scrooloose/nerdtree'
@@ -190,16 +190,18 @@ endfunction
 
 " KEY MAPPINGS
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let mapleader=';'
+"let mapleader=';'
+" comma much easier to type on phone :P
+let mapleader=','
 
 "make ;k act as close to <Esc> as possible
 set iminsert=1
-lnoremap ;k <Esc>
-vnoremap ;k <Esc>
-nnoremap <silent>;k :noh<CR>:set norelativenumber<CR>
-cnoremap ;k <c-e><c-u><Esc>:echo ""<CR>
+lnoremap <leader>k <Esc>
+vnoremap <leader>k <Esc>
+nnoremap <silent><leader>k :noh<CR>:set norelativenumber<CR>
+cnoremap <leader>k <c-e><c-u><Esc>:echo ""<CR>
 " if only we had this in Bash too lol
-tnoremap ;k <Esc>
+tnoremap <leader>k <Esc>
 
 "convenience commands
 "available for something else now
@@ -257,12 +259,11 @@ nnoremap <leader>p :bp<CR>
 " TODO: separate terminals from normal ;n ;p flow
 " ideally a ;t switches to and between terminals
 nnoremap <leader>d :bn<CR>:bd #<CR>
-" May start using vim as "tmux" in which case tabs would be
-" a welcome replacement to actually switching ttys
-nnoremap <leader>tt :tabnew<CR>
-nnoremap <leader>tn :tabn<CR>
-nnoremap <leader>tb :tabp<CR>
-nnoremap <leader>tp :tabp<CR>
+" deprecated 2021
+"nnoremap <leader>tt :tabnew<CR>
+"nnoremap <leader>tn :tabn<CR>
+"nnoremap <leader>tb :tabp<CR>
+"nnoremap <leader>tp :tabp<CR>
 " TODO: figure out a way to open / close windows without totally f***ing tabs
 
 "relative line number in visual line and visual block mode
@@ -274,16 +275,18 @@ endfunction
 function! s:enter_visual_block()
   execute "set relativenumber"
   execute "normal! "
+
 endfunction
 nnoremap <silent>V :call <SID>enter_visual_line()<CR>
 nnoremap <silent><c-v> :call <SID>enter_visual_block()<CR>
-vnoremap <silent>;k :<C-U>set norelativenumber<CR>
+vnoremap <silent><leader>k :<C-U>set norelativenumber<CR>
 vnoremap <silent><Esc> :<C-U>set norelativenumber<CR>
 " most common exits from visual mode
 vnoremap <silent>y y:<C-U>set norelativenumber<CR>
 vnoremap <silent>d d:<C-U>set norelativenumber<CR>
 vnoremap <silent>x x:<C-U>set norelativenumber<CR>
 "don't clobber register when pasting 
+"[ doesnt seem to work ]
 "vnoremap p "xd"pp
 vnoremap <C-p> p
 
@@ -428,7 +431,7 @@ command! -nargs=1 E call SiblingEdit(<f-args>)
 "oh you forgot to run vim with sudo did ya?
 command! W execute 'silent w !sudo tee "%" > /dev/null' | edit!
 
-function VimAndDie ()
+function! VimAndDie ()
   execute "!vim -S ~/.restart.vim"
   exit
 endfunction
@@ -603,6 +606,7 @@ augroup VIMRC_BUFF_STUFF
   "autocmd BufEnter * rv
 
   autocmd BufWritePost $MYVIMRC Vimrc
+  autocmd BufWritePost ~/src/pc/.vimrc Vimrc
   "autocmd BufWritePost .vimrc Vimrc 
   "autocmd BufWritePost _vimrc Vimrc 
 
